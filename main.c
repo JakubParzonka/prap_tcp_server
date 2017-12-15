@@ -50,9 +50,9 @@ int main(int argc, char **argv) {
         if (newSocketIsAwesome < 0) {
             puts("accept() error");
             exit(1);
-        } else {
-            puts("Connection with client established!");
         }
+            puts("Connection with client established!");
+            printf("Current socket: %d\n", newSocketIsAwesome);
     }
 
     return 0;
