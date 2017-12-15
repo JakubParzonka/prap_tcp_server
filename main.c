@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
     int portNumber;
     struct sockaddr_in serv_addr;
     struct sockaddr_in cli_addr;
-    socklen_t clilen;
+    socklen_t clientAddress;
     char buffer[256];
     int n;
 
@@ -38,5 +38,22 @@ int main(int argc, char **argv) {
         puts("Problem during binding => ");
         exit(1);
     }
+
+    if (listen(socketIsAwesome, 5) < 0)
+        perror("Problem during listing => ");
+    clientAddress = sizeof(cli_addr);
+
+
+    int pid;
+    while (1) {
+        newSocketIsAwesome = accept(socketIsAwesome, (struct sockaddr *) &cli_addr, &clientAddress);
+        if (newSocketIsAwesome < 0) {
+            puts("accept() error");
+            exit(1);
+        } else {
+            puts("Connection with client established!");
+        }
+    }
+
     return 0;
 }
