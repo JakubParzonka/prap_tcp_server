@@ -5,6 +5,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+const int buffer_size = 1024;
+
 int main(int argc, char **argv) {
     system("clear");
     if (argc != 2) {
@@ -18,8 +20,10 @@ int main(int argc, char **argv) {
     struct sockaddr_in serv_addr;
     struct sockaddr_in cli_addr;
     socklen_t clientAddress;
-    char buffer[256];
-    int n;
+    char *buffer;
+    int x;
+
+    buffer = (char *) malloc(buffer_size);
 
     socketIsAwesome = socket(AF_INET, SOCK_STREAM, 0);
     if (socketIsAwesome < 0) {
@@ -51,8 +55,25 @@ int main(int argc, char **argv) {
             puts("accept() error");
             exit(1);
         }
-            puts("Connection with client established!");
-            printf("Current socket: %d\n", newSocketIsAwesome);
+        puts("Connection with client established!");
+        printf("Current socket: %d\n", newSocketIsAwesome);
+
+        while (1) {
+            x = (int) read(newSocketIsAwesome, buffer, buffer_size);
+            if (x < 0) {
+                perror("read operation error ");
+                exit(1);
+            }
+
+            if (x == 0) {
+                printf("socket nr: %d closed\n", newSocketIsAwesome);
+                close(newSocketIsAwesome);
+                break;
+            }
+            printf("Message from client: %s\n", buffer);
+
+        }
+
     }
 
     return 0;
