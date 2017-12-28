@@ -72,6 +72,12 @@ int main(int argc, char **argv) {
             }
             printf("Message from client: %s\n", buffer);
 
+
+            x = (int) write(newSocketIsAwesome, buffer, buffer_size);
+            if (x < 0) {
+                perror("write operation error ");
+                exit(1);
+            }
         }
 
     }
