@@ -3,5 +3,5 @@ project(Serwer)
 
 set(CMAKE_C_STANDARD 99)
 
-set(SOURCE_FILES main.c)
-add_executable(Serwer ${SOURCE_FILES})
+set(SOURCE_FILES main.c functions.c functions.h struct.h)
+add_executable(Serwer ${SOURCE_FILES} functions.c functions.h)

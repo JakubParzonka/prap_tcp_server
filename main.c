@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include "functions.h"
 
 const int buffer_size = 1024;
 
@@ -58,25 +59,48 @@ int main(int argc, char **argv) {
         puts("Connection with client established!");
         printf("Current socket: %d\n", newSocketIsAwesome);
 
-        while (1) {
-            x = (int) read(newSocketIsAwesome, buffer, buffer_size);
-            if (x < 0) {
-                perror("read operation error ");
-                exit(1);
-            }
 
-            if (x == 0) {
-                printf("socket nr: %d closed\n", newSocketIsAwesome);
-                close(newSocketIsAwesome);
-                break;
-            }
-            printf("Message from client: %s\n", buffer);
+        pid = fork();
+
+        if (pid < 0) {
+            perror("fork operation error ");
+            exit(1);
+        } else if (pid == 0) {
+            while (1) {
+                x = (int) read(newSocketIsAwesome, buffer, buffer_size);
+                if (x < 0) {
+                    perror("read operation error ");
+                    exit(1);
+                }
+
+                if (x == 0) {
+                    printf("socket nr: %d closed\n", newSocketIsAwesome);
+                    close(newSocketIsAwesome);
+                    break;
+                }
+                printf("Message from client %d: %s\n", newSocketIsAwesome, buffer);
+
+                char **tempString = str_split(buffer, '\n');
+                char **splittedString = str_split(tempString[0], ' ');
+
+                if (splittedString)
+                {
+                    int i;
+                    for (i = 0; *(splittedString + i); i++)
+                    {
+                        printf("month=[%s]\n", *(splittedString + i));
+                        free(*(splittedString + i));
+                    }
+                    printf("\n");
+                    free(splittedString);
+                }
 
 
-            x = (int) write(newSocketIsAwesome, buffer, buffer_size);
-            if (x < 0) {
-                perror("write operation error ");
-                exit(1);
+                x = (int) write(newSocketIsAwesome, buffer, buffer_size);
+                if (x < 0) {
+                    perror("write operation error ");
+                    exit(1);
+                }
             }
         }
 
