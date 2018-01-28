@@ -80,23 +80,18 @@ int main(int argc, char **argv) {
                 }
                 printf("Message from client %d: %s\n", newSocketIsAwesome, buffer);
 
-                char **tempString = str_split(buffer, '\n');
-                char **splittedString = str_split(tempString[0], ' ');
+                /**
+                 * Spliting message from client
+                 */
+                char **tempMessage = str_split(buffer, '\n');
+                char **splittedMessage = str_split(tempMessage[0], ' ');
+                free(tempMessage);
+                int size = getMessageSize(splittedMessage);
 
-                if (splittedString)
-                {
-                    int i;
-                    for (i = 0; *(splittedString + i); i++)
-                    {
-                        printf("month=[%s]\n", *(splittedString + i));
-                        free(*(splittedString + i));
-                    }
-                    printf("\n");
-                    free(splittedString);
-                }
-
-
-                x = (int) write(newSocketIsAwesome, buffer, buffer_size);
+                char *preparedMessage = pickOneOperation(splittedMessage, size);
+                free(splittedMessage);
+                puts("\n\n=======================================================================\n\n");
+                x = (int) write(newSocketIsAwesome, preparedMessage, size);
                 if (x < 0) {
                     perror("write operation error ");
                     exit(1);

@@ -6,7 +6,7 @@
 #define SERWER_STRUCT_H
 
 struct element {
-    float goodThing;
+    double goodThing;
     struct element *next;
 };
 

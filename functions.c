@@ -3,6 +3,7 @@
 //
 
 #include "functions.h"
+#include "operations.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -49,4 +50,78 @@ char **str_split(char *a_str, const char a_delim) {
     }
 
     return result;
+}
+
+
+char *pickOneOperation(char **pString, int messageSize) {
+    printf("Operation sign => [%s]\n", *pString);
+
+    int i;
+    struct element *nextForOperation = NULL;
+    char *bufferToSend = malloc(0);
+
+    for (i = 1; i < messageSize; i++) {
+        struct element *tmpElement = (struct element *) malloc(sizeof(struct element));
+        tmpElement->goodThing = atof(pString[i]);
+        tmpElement->next = nextForOperation;
+        nextForOperation = tmpElement;
+    }
+    if (strcmp(pString[0], "+") == 0) {
+        double result = addition(nextForOperation);
+        printf("Result = %f", result);
+    } else if (strcmp(pString[0], "-") == 0) {
+        double result = substracion(nextForOperation);
+        printf("Result = %f", result);
+    } else if (strcmp(pString[0], ">") == 0) {
+        ascendingSorting(nextForOperation);
+        printList(nextForOperation);
+        bufferToSend = splitListAgain(nextForOperation);
+    } else if (strcmp(pString[0], "<") == 0) {
+        descendingSotring(nextForOperation);
+        printList(nextForOperation);
+        bufferToSend = splitListAgain(nextForOperation);
+    }
+
+    return bufferToSend;
+}
+
+int getMessageSize(char **pString) {
+    int size = 0;
+
+    if (!pString) return 0;
+
+    while (*(pString + size) != NULL) {
+        size++;
+    }
+
+
+    return size;
+}
+
+
+char *splitListAgain(struct element *el) {
+    struct element *tmp = el;
+
+    char *output = malloc(0);
+
+    while (tmp != NULL) {
+        char tempBuff[sizeof(double)];
+        sprintf(tempBuff, "%.2f", tmp->goodThing);
+        strcat(tempBuff, " ");
+        strcat(output, tempBuff);
+        tmp = tmp->next;
+    }
+
+    return output;
+}
+
+
+/* Function to print nodes in a given linked list */
+void printList(struct element *start) {
+    struct element *temp = start;
+    printf("\n");
+    while (temp != NULL) {
+        printf("%0.2f ", temp->goodThing);
+        temp = temp->next;
+    }
 }
