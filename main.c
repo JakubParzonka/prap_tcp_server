@@ -90,8 +90,11 @@ int main(int argc, char **argv) {
 
                 char *preparedMessage = pickOneOperation(splittedMessage, size);
                 free(splittedMessage);
+
+                printf("\nSize = %d\nMessage to server: %s\n", size,preparedMessage);
+
                 puts("\n\n=======================================================================\n\n");
-                x = (int) write(newSocketIsAwesome, preparedMessage, size);
+                x = (int) write(newSocketIsAwesome, preparedMessage, buffer_size);
                 if (x < 0) {
                     perror("write operation error ");
                     exit(1);

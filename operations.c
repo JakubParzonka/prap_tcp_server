@@ -33,11 +33,41 @@ double substracion(struct element *el) {
 }
 
 void descendingSotring(struct element *el) {
-    struct element *current = el;
-    struct element *next;
-    while (current != NULL) {
-        next = current->next;
-        current = next;
+    int swapped, i;
+    struct element *ptr1;
+    struct element *lptr = NULL;
+/*
+    *//* Checking for empty list *//*
+    if (ptr1 == NULL)
+        return;
+
+    do {
+        swapped = 0;
+        ptr1 = el;
+
+        while (ptr1->next != lptr) {
+            if (ptr1->goodThing < ptr1->next->goodThing) {
+                swap(ptr1->next, ptr1);
+                swapped = 1;
+            }
+            ptr1 = ptr1->next;
+        }
+        lptr = ptr1;
+    } while (swapped);
+*/
+
+    ptr1 = el;
+    for(; ptr1->next != NULL; ptr1 = ptr1->next)
+    {
+        for(lptr = ptr1->next; lptr != (struct element*)NULL; lptr = lptr->next)
+        {
+            if(ptr1->goodThing < lptr->goodThing)
+            {
+                int temp = (int) ptr1->goodThing;
+                ptr1->goodThing = lptr->goodThing;
+                lptr->goodThing = temp;
+            }
+        }
     }
 
 }

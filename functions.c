@@ -58,7 +58,7 @@ char *pickOneOperation(char **pString, int messageSize) {
 
     int i;
     struct element *nextForOperation = NULL;
-    char *bufferToSend = malloc(0);
+    char *bufferToSend = malloc(1024);
 
     for (i = 1; i < messageSize; i++) {
         struct element *tmpElement = (struct element *) malloc(sizeof(struct element));
@@ -68,10 +68,12 @@ char *pickOneOperation(char **pString, int messageSize) {
     }
     if (strcmp(pString[0], "+") == 0) {
         double result = addition(nextForOperation);
-        printf("Result = %f", result);
+        printf("Result = %f\n", result);
+        sprintf(bufferToSend, "%d", (int) result);
     } else if (strcmp(pString[0], "-") == 0) {
         double result = substracion(nextForOperation);
-        printf("Result = %f", result);
+        printf("Result = %f\n", result);
+        sprintf(bufferToSend, "%d", (int) result);
     } else if (strcmp(pString[0], ">") == 0) {
         ascendingSorting(nextForOperation);
         printList(nextForOperation);
@@ -80,6 +82,8 @@ char *pickOneOperation(char **pString, int messageSize) {
         descendingSotring(nextForOperation);
         printList(nextForOperation);
         bufferToSend = splitListAgain(nextForOperation);
+    } else {
+        bufferToSend = "WRONG INPUT";
     }
 
     return bufferToSend;
@@ -102,7 +106,7 @@ int getMessageSize(char **pString) {
 char *splitListAgain(struct element *el) {
     struct element *tmp = el;
 
-    char *output = malloc(0);
+    char *output = malloc(1024);
 
     while (tmp != NULL) {
         char tempBuff[sizeof(double)];
@@ -119,7 +123,7 @@ char *splitListAgain(struct element *el) {
 /* Function to print nodes in a given linked list */
 void printList(struct element *start) {
     struct element *temp = start;
-    printf("\n");
+    printf("\nLinked list elements:\n");
     while (temp != NULL) {
         printf("%0.2f ", temp->goodThing);
         temp = temp->next;
